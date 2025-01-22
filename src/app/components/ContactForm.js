@@ -4,15 +4,46 @@ import React, { useState } from "react";
 export default function ContactForm({ onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [error, setError] = useState(null); // State to handle error message
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true); // Show loading spinner
-    // Simulate a message submission process (you can replace this with actual submission logic)
-    setTimeout(() => {
+    setError(null); // Reset error message before submitting
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsLoading(false); // Hide loading spinner
+        setSubmitted(true); // Show success message
+      } else {
+        throw new Error("Error sending email");
+      }
+    } catch (error) {
       setIsLoading(false); // Hide loading spinner
-      setSubmitted(true); // Show success message after submission
-    }, 2000); // Simulate a 2-second delay
+      console.error("Error:", error);
+      setError("Failed to send the message. Please try again later."); // Show error message
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -32,6 +63,11 @@ export default function ContactForm({ onClose }) {
             Thank you for your message. We'll get back to you soon.
           </p>
         </div>
+      ) : error ? (
+        <div className="text-center p-6 bg-red-50 rounded-lg">
+          <h3 className="text-lg font-semibold text-red-800 mb-2">Error</h3>
+          <p className="text-red-600">{error}</p>
+        </div>
       ) : (
         <form className="space-y-4 max-w-md mx-auto" onSubmit={handleSubmit}>
           <div>
@@ -45,6 +81,8 @@ export default function ContactForm({ onClose }) {
               type="text"
               id="name"
               name="name"
+              value={formData.name}
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 text-black border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#003566] focus:border-transparent"
             />
@@ -60,6 +98,8 @@ export default function ContactForm({ onClose }) {
               type="email"
               id="email"
               name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 text-black border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#003566] focus:border-transparent"
             />
@@ -74,6 +114,8 @@ export default function ContactForm({ onClose }) {
             <textarea
               id="message"
               name="message"
+              value={formData.message}
+              onChange={handleChange}
               required
               rows="4"
               className="w-full px-4 py-2 text-black border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#003566] focus:border-transparent resize-none"
