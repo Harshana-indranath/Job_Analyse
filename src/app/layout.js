@@ -27,10 +27,29 @@ export default function RootLayout({ children }) {
       >
         {/* Navbar */}
         <Header />
-        {/* Main Content */}
+        {/* Main Content with Ads */}
         <main className="flex-grow">
-          <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
+          <div className="flex max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Left Ads */}
+            <aside className="hidden lg:block w-1/6">
+              <div className="sticky top-8">
+                {/* Google Ads script / iframe */}
+                <div className="ad-placeholder bg-gray-200 h-[600px] rounded-md text-red-500 flex items-center justify-center ">
+                  Ad Space
+                </div>
+              </div>
+            </aside>
+            {/* Main Content */}
+            <div className="w-full lg:w-4/6">{children}</div>
+            {/* Right Ads */}
+            <aside className="hidden lg:block w-1/6">
+              <div className="sticky top-8">
+                {/* Google Ads script / iframe */}
+                <div className="ad-placeholder bg-gray-200 h-[600px] rounded-md text-red-500 flex items-center justify-center ">
+                  Ad Space
+                </div>
+              </div>
+            </aside>
           </div>
         </main>
         {/* Footer */}
