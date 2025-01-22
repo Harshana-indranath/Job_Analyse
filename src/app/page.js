@@ -3,47 +3,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const responseText = `
-**Job Summary**
-
-This job posting is for a position related to ReactJS, a popular JavaScript library for building user interfaces. The role likely involves developing web applications using ReactJS, collaborating with other developers, and working on front-end projects.
-
-**Suggested Relevant Skills and Model Achievements**
-
-1. ReactJS Development
-   - Built a responsive and interactive user interface for a customer management system using ReactJS
-
-2. JavaScript Programming
-   - Optimized website performance by writing efficient JavaScript code and implementing best practices
-
-3. Front-End Development
-   - Designed and implemented visually appealing features on the front end of a website to enhance user experience
-
-**Typical Pain Points for This Role**
-
-- Keeping up with the fast-paced changes and updates in the ReactJS ecosystem
-- Balancing performance optimizations with delivering visually appealing user interfaces
-- Collaborating effectively with back-end developers to integrate front-end components
-
-**Relevant Keywords for ATS Optimization**
-
-- ReactJS
-- JavaScript
-- Front-End Development
-- User Interface Design
-- Web Development
-
-**Action Verbs and Language Refinement**
-
-Developed, Designed, Implemented, Optimized, Collaborated, Integrated, Enhanced, Built, Wrote, Maintained
-
-**Questions to Ask the Interviewer**
-
-1. Can you tell me more about the team structure and how front-end developers collaborate with back-end developers?
-2. How does the company approach staying updated with the latest developments in ReactJS and other front-end technologies?
-3. What are the key performance indicators for success in this role, particularly related to front-end development and user interface design?
-`;
-
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,30 +13,25 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
 
-    // try {
-    //   const response = await fetch("/api/generate-text", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ prompt }),
-    //   });
+    try {
+      const response = await fetch("/api/generate-text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
-    //   const data = await response.json();
+      const data = await response.json();
+      sessionStorage.setItem("originalJobPost", JSON.stringify(prompt));
+      sessionStorage.setItem("jobAnalysisResult", JSON.stringify(data.text));
 
-    sessionStorage.setItem("originalJobPost", JSON.stringify(prompt));
-    sessionStorage.setItem("jobAnalysisResult", JSON.stringify(responseText));
-
-    // Redirect to the result page
-    setTimeout(() => {
       router.push("/result");
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
       setLoading(false);
-    }, 2000);
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    }
   };
   return (
     <div className="w-full flex justify-center">
