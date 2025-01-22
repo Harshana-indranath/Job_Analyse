@@ -3,6 +3,7 @@ import { OpenAI } from "openai";
 // Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Store your API key in environment variables
+  organization: process.env.OPENAI_ORGANIZATION_ID,
 });
 
 export async function POST(req) {
