@@ -1,101 +1,126 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const responseText = `
+**Job Summary**
+
+This job posting is for a position related to ReactJS, a popular JavaScript library for building user interfaces. The role likely involves developing web applications using ReactJS, collaborating with other developers, and working on front-end projects.
+
+**Suggested Relevant Skills and Model Achievements**
+
+1. ReactJS Development
+   - Built a responsive and interactive user interface for a customer management system using ReactJS
+
+2. JavaScript Programming
+   - Optimized website performance by writing efficient JavaScript code and implementing best practices
+
+3. Front-End Development
+   - Designed and implemented visually appealing features on the front end of a website to enhance user experience
+
+**Typical Pain Points for This Role**
+
+- Keeping up with the fast-paced changes and updates in the ReactJS ecosystem
+- Balancing performance optimizations with delivering visually appealing user interfaces
+- Collaborating effectively with back-end developers to integrate front-end components
+
+**Relevant Keywords for ATS Optimization**
+
+- ReactJS
+- JavaScript
+- Front-End Development
+- User Interface Design
+- Web Development
+
+**Action Verbs and Language Refinement**
+
+Developed, Designed, Implemented, Optimized, Collaborated, Integrated, Enhanced, Built, Wrote, Maintained
+
+**Questions to Ask the Interviewer**
+
+1. Can you tell me more about the team structure and how front-end developers collaborate with back-end developers?
+2. How does the company approach staying updated with the latest developments in ReactJS and other front-end technologies?
+3. What are the key performance indicators for success in this role, particularly related to front-end development and user interface design?
+`;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const handleChange = (e) => setPrompt(e.target.value);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // try {
+    //   const response = await fetch("/api/generate-text", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ prompt }),
+    //   });
+
+    //   const data = await response.json();
+
+    sessionStorage.setItem("originalJobPost", JSON.stringify(prompt));
+    sessionStorage.setItem("jobAnalysisResult", JSON.stringify(responseText));
+
+    // Redirect to the result page
+    setTimeout(() => {
+      router.push("/result");
+      setLoading(false);
+    }, 2000);
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
+  return (
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-3xl">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-primary mb-3">
+            AI-Powered Job Post Analysis
+          </h2>
+          <p className="text-gray-600">
+            Paste a job posting below to get detailed insights for your resume
+            preparation and job interview tips.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Image alt="contact" width={20} height={20} src="/file.svg" />
+              <h3 className="font-medium text-primary">Job Posting Content</h3>
+            </div>
+            <textarea
+              value={prompt}
+              onChange={handleChange}
+              className="w-full h-[40rem] p-6 text-black border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary bg-gray-50/50"
+              placeholder="Paste the complete job posting here..."
+              required
+            ></textarea>
+          </div>
+          <button
+            disabled={!prompt || loading}
+            type="submit"
+            className="w-full flex items-center justify-center bg-primary text-white py-3 px-4 rounded-lg hover:bg-[#004580] disabled:bg-primary/40  disabled:cursor-not-allowed shadow-sm hover:shadow-md disabled:shadow-none"
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-t-4 border-b-4 border-white rounded-full animate-spin"></div>
+            ) : (
+              <Image alt="contact" width={20} height={20} src="/send.svg" />
+            )}
+            <span className="ml-2">
+              {loading ? "Analyzing Job Post..." : "Analyze Job Post"}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
