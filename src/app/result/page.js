@@ -6,8 +6,11 @@ import JobAnalysisReport from "../components/JobAnalysisReport";
 import Link from "next/link";
 import jsPDF from "jspdf";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ResultPage = () => {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   const generatePDF = () => {
@@ -30,6 +33,15 @@ const ResultPage = () => {
     });
   };
 
+  const goBack = () => {
+    // removing sessions
+    sessionStorage.removeItem("jobAnalysisResult");
+    sessionStorage.removeItem("invalidJobPost");
+    sessionStorage.removeItem("originalJobPost");
+    // redirecting to home page
+    router.push("/");
+  };
+
   return (
     <div className="w-full max-w-[90rem] flex flex-col lg:flex-row justify-center">
       {/* Left Ad Space */}
@@ -46,8 +58,8 @@ const ResultPage = () => {
         <div className="space-y-6">
           {/* Buttons */}
           <div className="flex justify-between items-center">
-            <Link
-              href="/"
+            <button
+              onClick={goBack}
               className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
             >
               <Image
@@ -57,7 +69,7 @@ const ResultPage = () => {
                 src="/backArrow.svg"
               />
               Back to Analysis
-            </Link>
+            </button>
             <button
               onClick={generatePDF}
               disabled={loading}
