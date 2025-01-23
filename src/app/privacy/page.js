@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-3xl mx-auto px-4">
       {/* Back to Home Link */}
       <Link
         className="flex items-center gap-2 text-gray-600 hover:text-primary mb-8 w-fit"
