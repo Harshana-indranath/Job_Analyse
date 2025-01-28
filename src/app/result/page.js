@@ -14,13 +14,26 @@ const ResultPage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Reinitialize the ads when the page is loaded
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense error:", e);
-    }
-  }, []);
+  const initializeAds = () => {
+    document.querySelectorAll(".adsbygoogle").forEach((slot) => {
+      if (slot.offsetWidth > 0) {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.error("AdSense error:", e);
+        }
+      }
+    });
+  };
+
+  const handleResize = () => initializeAds();
+
+  initializeAds();
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   const generatePDF = async () => {
     const reportContent1 = document.getElementById("job-report-page1");
