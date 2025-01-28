@@ -27,10 +27,8 @@ export default function RootLayout({ children }) {
       <body
         className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased bg-foreground ui-sans-serif`}
       >
-        <Head>
           {/* Include the AdSense script */}
-          <AdSense pId={"8394717406255113"} />
-        </Head>
+          <AdSense  />
         {/* Navbar */}
         <Header />
         {/* Main Content */}

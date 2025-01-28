@@ -79,7 +79,7 @@ const ResultPage = () => {
       {/* Left Ad Space */}
       <aside className="hidden lg:block w-1/6">
         <div className="sticky top-8">
-          <div className="ad-placeholder h-[600px]  flex items-center justify-center">
+          <div className="ad-placeholder h-[600px] flex items-center justify-center">
             {/* Ad Space Left */}
             <ins
               className="adsbygoogle"
