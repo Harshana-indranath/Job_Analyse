@@ -40,7 +40,7 @@ const JobAnalysisReport = () => {
   }, []);
   return (
     <div
-      className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-6"
+      className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-6 z-50"
       id="job-analysis-report"
     >
       <div className="space-y-6">

@@ -7,35 +7,37 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import JobAnalysisReport from "../components/JobAnalysisReport";
+import JobAnalysisReport2 from "../components/JobAnalysisReport2";
 
 const ResultPage = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [isForPDF, setIsForPDF] = useState(false);
 
   useEffect(() => {
-  const initializeAds = () => {
-    document.querySelectorAll(".adsbygoogle").forEach((slot) => {
-      if (slot.offsetWidth > 0) {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          console.error("AdSense error:", e);
+    const initializeAds = () => {
+      document.querySelectorAll(".adsbygoogle").forEach((slot) => {
+        if (slot.offsetWidth > 0) {
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.error("AdSense error:", e);
+          }
         }
-      }
-    });
-  };
+      });
+    };
 
-  const handleResize = () => initializeAds();
+    const handleResize = () => initializeAds();
 
-  initializeAds();
-  window.addEventListener("resize", handleResize);
+    initializeAds();
+    window.addEventListener("resize", handleResize);
 
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const generatePDF = async () => {
+    setIsForPDF(true);
     const reportContent1 = document.getElementById("job-report-page1");
     const reportContent2 = document.getElementById("job-report-page2");
     const reportContent3 = document.getElementById("job-report-page3");
@@ -75,6 +77,7 @@ const ResultPage = () => {
       console.error("PDF Generation Error:", error);
     } finally {
       setLoading(false);
+      setIsForPDF(false);
     }
   };
 
@@ -138,7 +141,11 @@ const ResultPage = () => {
           </div>
 
           {/* Job Analysis Report */}
-          <JobAnalysisReport />
+          {/* <JobAnalysisReport /> */}
+          <div>
+            {" "}
+            <JobAnalysisReport2 isForPDF={isForPDF} />
+          </div>
         </div>
       </div>
 
