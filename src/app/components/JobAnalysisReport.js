@@ -1,5 +1,6 @@
 // components/JobAnalysisReport.js
-// import { parseResponse } from "@/util/parseResponse";
+
+import { parseResponse } from "../../util/parseResponse";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 
@@ -31,8 +32,8 @@ const JobAnalysisReport = () => {
     if (inValid) setInvalidJobPostText(JSON.parse(storedResult));
 
     if (storedResult && !inValid) {
-      // const parsedResponse = parseResponse(JSON.parse(storedResult));
-      // setResult(parsedResponse);
+      const parsedResponse = parseResponse(JSON.parse(storedResult));
+      setResult(parsedResponse);
     }
 
     if (jobPost) setOriginalPost(JSON.parse(jobPost));
