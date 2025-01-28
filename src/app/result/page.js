@@ -1,36 +1,68 @@
 "use client"; // This line ensures the component runs on the client-side
 
 // pages/result.js
-import React, { useState } from "react";
-import JobAnalysisReport from "../components/JobAnalysisReport";
-import Link from "next/link";
+import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import JobAnalysisReport from "../components/JobAnalysisReport";
 
 const ResultPage = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    setLoading(true); // Show the spinner when the process starts
+  useEffect(() => {
+    // Reinitialize the ads when the page is loaded
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, []);
 
-    // Capture the content you want to export as a PDF
-    const reportContent = document.getElementById("job-analysis-report");
+  const generatePDF = async () => {
+    const reportContent1 = document.getElementById("job-report-page1");
+    const reportContent2 = document.getElementById("job-report-page2");
+    const reportContent3 = document.getElementById("job-report-page3");
 
-    doc.html(reportContent, {
-      callback: function (doc) {
-        setLoading(false); // Hide the spinner once PDF is generated
-        doc.save("job_analysis_report.pdf");
-      },
-      x: 10,
-      y: 10,
-      width: 180,
-      windowWidth: 800,
-      scale: 1,
-    });
+    // Initialize jsPDF instance
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    // Helper function to render HTML content into a PDF page
+    const renderContentToPDF = async (element, pdfInstance, pageNumber) => {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        backgroundColor: "white",
+      });
+      const imgData = canvas.toDataURL("image/png");
+
+      const pageWidth = pdfInstance.internal.pageSize.getWidth();
+      const pageHeight = pdfInstance.internal.pageSize.getHeight();
+
+      const imgWidth = pageWidth - 20; // Add 10mm margin on each side
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Add image to the PDF
+      if (pageNumber > 0) pdfInstance.addPage(); // Add a new page for subsequent content
+      pdfInstance.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+    };
+
+    // Render each content block as a separate page
+    setLoading(true);
+    try {
+      await renderContentToPDF(reportContent1, pdf, 0);
+      await renderContentToPDF(reportContent2, pdf, 1);
+      await renderContentToPDF(reportContent3, pdf, 2);
+
+      // Save the PDF
+      pdf.save("job_analysis_report.pdf");
+    } catch (error) {
+      console.error("PDF Generation Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const goBack = () => {
@@ -45,10 +77,18 @@ const ResultPage = () => {
   return (
     <div className="w-full max-w-[90rem] flex flex-col lg:flex-row justify-center">
       {/* Left Ad Space */}
-      <aside className="hidden lg:block w-1/6">
+      <aside className="hidden lg:block w-1/6 bg-slate-500 text-white">
         <div className="sticky top-8">
-          <div className="ad-placeholder  h-[600px]  flex items-center justify-center">
+          <div className="ad-placeholder h-[600px]  flex items-center justify-center">
             {/* Ad Space Left */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-8394717406255113"
+              data-ad-slot="7104720583"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
           </div>
         </div>
       </aside>
@@ -94,6 +134,14 @@ const ResultPage = () => {
         <div className="sticky top-8">
           <div className="ad-placeholder  h-[600px]  flex items-center justify-center">
             {/* Ad Space Right */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-8394717406255113"
+              data-ad-slot="7104720583"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
           </div>
         </div>
       </aside>

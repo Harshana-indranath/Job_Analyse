@@ -32,7 +32,6 @@ export async function POST(req) {
 
     // Check if response contains the invalid message
     const isInvalid = responseText.includes(invalidMessage);
-
     return new Response(
       JSON.stringify({ text: responseText, invalidInput: isInvalid }),
       {

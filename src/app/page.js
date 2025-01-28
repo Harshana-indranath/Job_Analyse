@@ -22,6 +22,7 @@ export default function Home() {
         body: JSON.stringify({ prompt }),
       });
       const data = await response.json();
+      
       sessionStorage.setItem("originalJobPost", JSON.stringify(prompt));
       sessionStorage.setItem("jobAnalysisResult", JSON.stringify(data.text));
       sessionStorage.setItem(
