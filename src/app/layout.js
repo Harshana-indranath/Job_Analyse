@@ -1,5 +1,4 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import Head from "next/head";
 import AdSense from "./components/AdSense";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
@@ -27,8 +26,8 @@ export default function RootLayout({ children }) {
       <body
         className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased bg-foreground ui-sans-serif`}
       >
-          {/* Include the AdSense script */}
-          <AdSense  />
+        {/* Include the AdSense script */}
+        <AdSense />
         {/* Navbar */}
         <Header />
         {/* Main Content */}

@@ -43,7 +43,7 @@ const JobAnalysisReport2 = ({ isForPDF = false }) => {
   }`;
 
   return (
-    <div className="bg-white  space-y-6">
+    <div className="bg-white space-y-6" id="job-report">
       <div className="space-y-6">
         <div
           className="rounded-xl shadow-sm border border-gray-200 p-8"

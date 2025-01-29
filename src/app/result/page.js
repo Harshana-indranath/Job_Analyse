@@ -6,7 +6,6 @@ import jsPDF from "jspdf";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import JobAnalysisReport from "../components/JobAnalysisReport";
 import JobAnalysisReport2 from "../components/JobAnalysisReport2";
 
 const ResultPage = () => {
@@ -14,6 +13,13 @@ const ResultPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [isForPDF, setIsForPDF] = useState(false);
+  const [invalidJobPost, setInvalidJobPost] = useState(false);
+
+  // checking invalid JobPost
+  useEffect(() => {
+    const invalidJobPost = sessionStorage.getItem("invalidJobPost");
+    setInvalidJobPost(invalidJobPost === "true");
+  }, []);
 
   useEffect(() => {
     const initializeAds = () => {
@@ -128,7 +134,7 @@ const ResultPage = () => {
             </button>
             <button
               onClick={generatePDF}
-              disabled={loading}
+              disabled={loading || invalidJobPost}
               className="flex items-center gap-2 bg-primary text-white py-2 px-4 rounded-lg hover:bg-[#004580] transition-all duration-200 disabled:bg-primary/40 disabled:cursor-not-allowed shadow-sm hover:shadow-md disabled:shadow-none"
             >
               {loading ? (

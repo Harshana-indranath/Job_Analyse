@@ -2,7 +2,6 @@ import Script from 'next/script';
 import React from 'react'
 
 const AdSense = () => {
-  console.log("ad sense")
   return (
     <Script
         async
