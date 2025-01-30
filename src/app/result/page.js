@@ -1,12 +1,11 @@
 "use client"; // This line ensures the component runs on the client-side
 
 // pages/result.js
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import JobAnalysisReport2 from "../components/JobAnalysisReport2";
+import JobAnalysisReport from "../components/JobAnalysisReport";
 
 const ResultPage = () => {
   const router = useRouter();
@@ -42,49 +41,29 @@ const ResultPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const generatePDF = async () => {
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    setLoading(true); // Show the spinner when the process starts
     setIsForPDF(true);
-    const reportContent1 = document.getElementById("job-report-page1");
-    const reportContent2 = document.getElementById("job-report-page2");
-    const reportContent3 = document.getElementById("job-report-page3");
 
-    // Initialize jsPDF instance
-    const pdf = new jsPDF("p", "mm", "a4");
+    // Capture the content you want to export as a PDF
+    const reportContent = document.getElementById("job-analysis-report");
 
-    // Helper function to render HTML content into a PDF page
-    const renderContentToPDF = async (element, pdfInstance, pageNumber) => {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        backgroundColor: "white",
-      });
-      const imgData = canvas.toDataURL("image/png");
-
-      const pageWidth = pdfInstance.internal.pageSize.getWidth();
-      const pageHeight = pdfInstance.internal.pageSize.getHeight();
-
-      const imgWidth = pageWidth - 20; // Add 10mm margin on each side
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      // Add image to the PDF
-      if (pageNumber > 0) pdfInstance.addPage(); // Add a new page for subsequent content
-      pdfInstance.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-    };
-
-    // Render each content block as a separate page
-    setLoading(true);
-    try {
-      await renderContentToPDF(reportContent1, pdf, 0);
-      await renderContentToPDF(reportContent2, pdf, 1);
-      await renderContentToPDF(reportContent3, pdf, 2);
-
-      // Save the PDF
-      pdf.save("job_analysis_report.pdf");
-    } catch (error) {
-      console.error("PDF Generation Error:", error);
-    } finally {
-      setLoading(false);
-      setIsForPDF(false);
-    }
+    doc.html(reportContent, {
+      callback: function (doc) {
+        setLoading(false); // Hide the spinner once PDF is generated
+        doc.save("job_analysis_report.pdf");
+        setIsForPDF(false);
+      },
+      margin: [15, 5, 15, 5],
+      paddding: 20,
+      x: 10,
+      y: 10,
+      width: 180,
+      windowWidth: 800,
+      scale: 1,
+      autoPaging: "text",
+    });
   };
 
   const goBack = () => {
@@ -147,11 +126,7 @@ const ResultPage = () => {
           </div>
 
           {/* Job Analysis Report */}
-          {/* <JobAnalysisReport /> */}
-          <div>
-            {" "}
-            <JobAnalysisReport2 isForPDF={isForPDF} />
-          </div>
+          <JobAnalysisReport isForPDF={isForPDF} />
         </div>
       </div>
 
