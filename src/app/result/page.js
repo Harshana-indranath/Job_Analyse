@@ -1,21 +1,50 @@
 "use client"; // This line ensures the component runs on the client-side
 
 // pages/result.js
-import React, { useState } from "react";
-import JobAnalysisReport from "../components/JobAnalysisReport";
-import Link from "next/link";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import JobAnalysisReport from "../components/JobAnalysisReport";
 
 const ResultPage = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [isForPDF, setIsForPDF] = useState(false);
+  const [invalidJobPost, setInvalidJobPost] = useState(false);
+
+  // checking invalid JobPost
+  useEffect(() => {
+    const invalidJobPost = sessionStorage.getItem("invalidJobPost");
+    setInvalidJobPost(invalidJobPost === "true");
+  }, []);
+
+  useEffect(() => {
+    const initializeAds = () => {
+      document.querySelectorAll(".adsbygoogle").forEach((slot) => {
+        if (slot.offsetWidth > 0) {
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.error("AdSense error:", e);
+          }
+        }
+      });
+    };
+
+    const handleResize = () => initializeAds();
+
+    initializeAds();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const generatePDF = () => {
     const doc = new jsPDF();
     setLoading(true); // Show the spinner when the process starts
+    setIsForPDF(true);
 
     // Capture the content you want to export as a PDF
     const reportContent = document.getElementById("job-analysis-report");
@@ -24,12 +53,16 @@ const ResultPage = () => {
       callback: function (doc) {
         setLoading(false); // Hide the spinner once PDF is generated
         doc.save("job_analysis_report.pdf");
+        setIsForPDF(false);
       },
+      margin: [15, 5, 15, 5],
+      paddding: 20,
       x: 10,
       y: 10,
       width: 180,
       windowWidth: 800,
       scale: 1,
+      autoPaging: "text",
     });
   };
 
@@ -47,8 +80,16 @@ const ResultPage = () => {
       {/* Left Ad Space */}
       <aside className="hidden lg:block w-1/6">
         <div className="sticky top-8">
-          <div className="ad-placeholder  h-[600px]  flex items-center justify-center">
+          <div className="ad-placeholder h-[600px] flex items-center justify-center">
             {/* Ad Space Left */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-8394717406255113"
+              data-ad-slot="7104720583"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
           </div>
         </div>
       </aside>
@@ -72,7 +113,7 @@ const ResultPage = () => {
             </button>
             <button
               onClick={generatePDF}
-              disabled={loading}
+              disabled={loading || invalidJobPost}
               className="flex items-center gap-2 bg-primary text-white py-2 px-4 rounded-lg hover:bg-[#004580] transition-all duration-200 disabled:bg-primary/40 disabled:cursor-not-allowed shadow-sm hover:shadow-md disabled:shadow-none"
             >
               {loading ? (
@@ -85,7 +126,7 @@ const ResultPage = () => {
           </div>
 
           {/* Job Analysis Report */}
-          <JobAnalysisReport />
+          <JobAnalysisReport isForPDF={isForPDF} />
         </div>
       </div>
 
@@ -94,6 +135,14 @@ const ResultPage = () => {
         <div className="sticky top-8">
           <div className="ad-placeholder  h-[600px]  flex items-center justify-center">
             {/* Ad Space Right */}
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-8394717406255113"
+              data-ad-slot="7104720583"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
           </div>
         </div>
       </aside>

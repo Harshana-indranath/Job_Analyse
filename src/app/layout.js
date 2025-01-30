@@ -1,8 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import AdSense from "./components/AdSense";
+import Content from "./components/Content";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Content from "./components/Content";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,8 @@ export default function RootLayout({ children }) {
       <body
         className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased bg-foreground ui-sans-serif`}
       >
+        {/* Include the AdSense script */}
+        <AdSense />
         {/* Navbar */}
         <Header />
         {/* Main Content */}

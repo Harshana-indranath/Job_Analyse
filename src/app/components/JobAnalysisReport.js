@@ -1,9 +1,11 @@
 // components/JobAnalysisReport.js
-import { parseResponse } from "@/util/parseResponse";
+
+import { cn } from "../../util/util";
+import { parseResponse } from "../../util/parseResponse";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 
-const JobAnalysisReport = () => {
+const JobAnalysisReport = ({ isForPDF = false }) => {
   const router = useRouter();
   const [result, setResult] = useState("");
   const [originalPost, setOriginalPost] = useState("");
@@ -37,9 +39,17 @@ const JobAnalysisReport = () => {
 
     if (jobPost) setOriginalPost(JSON.parse(jobPost));
   }, []);
+
+  const verticalLineClass = `h-6 w-1 bg-[#003566] rounded-full ${
+    isForPDF ? "hidden" : ""
+  }`;
+
   return (
     <div
-      className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-6"
+      className={cn(
+        "bg-white rounded-xl p-8 space-y-6 z-50",
+        !isForPDF && " shadow-sm border border-gray-200"
+      )}
       id="job-analysis-report"
     >
       <div className="space-y-6">
@@ -66,7 +76,7 @@ const JobAnalysisReport = () => {
           <div className="prose max-w-none">
             {/* Job Summary */}
             <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-              <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+              <div className={verticalLineClass}></div>
               Job Summary
             </h3>
             <p className="text-gray-700 leading-relaxed">
@@ -76,7 +86,7 @@ const JobAnalysisReport = () => {
               <Fragment>
                 {/* Suggested Relevant Skills */}
                 <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-                  <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+                  <div className={verticalLineClass}></div>
                   Suggested Relevant Skills and Model Achievements
                 </h3>
                 {result["Suggested Relevant Skills and Model Achievements"]
@@ -89,7 +99,7 @@ const JobAnalysisReport = () => {
 
                 {/* Typical Pain Points */}
                 <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-                  <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+                  <div className={verticalLineClass}></div>
                   Typical Pain Points for This Role
                 </h3>
                 {result["Typical Pain Points for This Role"]
@@ -102,7 +112,7 @@ const JobAnalysisReport = () => {
 
                 {/* Relevant Keywords */}
                 <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-                  <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+                  <div className={verticalLineClass}></div>
                   Relevant Keywords for ATS Optimization
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
@@ -111,7 +121,7 @@ const JobAnalysisReport = () => {
 
                 {/* Action Verbs */}
                 <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-                  <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+                  <div className={verticalLineClass}></div>
                   Action Verbs and Language Refinement
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
@@ -120,7 +130,7 @@ const JobAnalysisReport = () => {
 
                 {/* Questions to Ask the Interviewer */}
                 <h3 className="text-xl font-bold text-[#003566] mt-8 mb-4 flex items-center gap-2">
-                  <div className="h-6 w-1 bg-[#003566] rounded-full"></div>
+                  <div className={verticalLineClass}></div>
                   Questions to Ask the Interviewer
                 </h3>
                 {result["Questions to Ask the Interviewer"]
